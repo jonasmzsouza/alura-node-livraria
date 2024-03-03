@@ -1,4 +1,4 @@
-import Livro from "../models/Livro.js";
+import livros from "../models/Livro.js";
 
 class LivroController {
   static listarLivros = (req, res) => {
@@ -22,7 +22,7 @@ class LivroController {
   };
 
   static cadastrarLivro = (req, res) => {
-    let livro = new Livro(req.body);
+    let livro = new livros(req.body);
     livro.save((err) => {
       if (err) {
         res
@@ -39,7 +39,19 @@ class LivroController {
 
     livros.findByIdAndUpdate(id, { $set: req.body }, (err) => {
       if (!err) {
-        resp.status(200).send({ message: "Livro atualizado com sucesso!" });
+        res.status(200).send({ message: "Livro atualizado com sucesso!" });
+      } else {
+        res.status(500).send({ message: err.message });
+      }
+    });
+  };
+
+  static deletarLivro = (req, res) => {
+    const id = req.params.id;
+
+    livros.findByIdAndDelete(id, (err) => {
+      if (!err) {
+        res.status(200).send({ message: "Livro removido com sucewsso!" });
       } else {
         res.status(500).send({ message: err.message });
       }
